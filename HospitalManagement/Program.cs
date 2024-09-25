@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,36 +7,118 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement
 {
+    enum eOption
+    {
+        Exit,
+        RegisterDoctor,
+        RegisterPatient,
+        RegisterAdministrative,
+        ListDoctors,
+        ListDoctorsPatients,
+        DeletePatient,
+        HospitalPeople
+    }
     internal class Program
     {
+        static Hospital hospital;
         static void Main(string[] args)
         {
-            Hospital hospital = new Hospital();
+            hospital = new Hospital();
+            Menu();
+        }
 
-            Doctor doctor1 = new Doctor("Maria");
-            Doctor doctor2 = new Doctor("Jordi");
-            Doctor doctor3 = new Doctor("Laura");
+        static void Menu()
+        {
+            eOption option;
 
-            Patient patient1 = new Patient("Juan");
-            Patient patient2 = new Patient("Pepe", doctor1);
-            Patient patient3 = new Patient("Pol");
+            do
+            {
+                Console.WriteLine(@"
+0. Exit
+1. Register a doctor
+2. Register a patient
+3. Register an dministrative
+4. List of doctors
+5. List of the patients of a doctor
+6. Delete a patient
+7. People from hospital");
+                
+                option = (eOption)int.Parse(Console.ReadLine());
 
-            Administrative admin1 = new Administrative("Pepa");
-            Administrative admin2 = new Administrative("Juana");
-            Administrative admin3 = new Administrative("Evaristo");
+                switch(option)
+                {
+                    case eOption.Exit:
+                        return;
+                    case eOption.RegisterDoctor:
+                        RegisterDoctor();
+                        break;
+                    case eOption.RegisterPatient:
+                        RegisterPatient();
+                        break;
+                    case eOption.RegisterAdministrative:
+                        break;
+                    case eOption.ListDoctors:
+                        break;
+                    case eOption.ListDoctorsPatients:
+                        break;
+                    case eOption.DeletePatient:
+                        break;
+                    case eOption.HospitalPeople:
+                        Console.WriteLine(hospital);
+                        break;
+                }
 
-            hospital.AddPerson(patient1);
-            hospital.AddPerson(patient2);
-            hospital.AddPerson(patient3);
-            hospital.AddPerson(doctor1);
-            hospital.AddPerson(doctor2);
-            hospital.AddPerson(doctor3);
-            hospital.AddPerson(admin1);
-            hospital.AddPerson(admin2);
-            hospital.AddPerson(admin3);
+            } while (AskToContinue("Do you want to do something else?"));
+        }
 
-            Console.WriteLine(hospital);
-            Console.ReadLine();
+        static void RegisterDoctor()
+        {
+            Console.WriteLine("Type the doctor's name");
+            Doctor doctor = new Doctor(Console.ReadLine());
+            hospital.AddPerson(doctor);
+        }
+
+        static void RegisterPatient()
+        {
+            string name, doctorName;
+            Console.WriteLine("Type the patient's name");
+            name = Console.ReadLine();
+            Console.WriteLine("Type the name of the doctor");
+            doctorName = Console.ReadLine();
+
+            foreach (Doctor d in hospital.GetListOf<Doctor>())
+            {
+                if (d.Name == doctorName)
+                {
+                    Patient p = new Patient(name, d);
+                    hospital.AddPerson(p);
+                    return;
+                }
+            }
+
+            Doctor doctor = new Doctor(doctorName);
+            hospital.AddPerson(doctor);
+
+            Patient patient = new Patient(name, doctor);
+            hospital.AddPerson(patient);
+        }
+
+        static bool AskToContinue(string question)
+        {
+            string answer;
+            bool keep = true;
+            do
+            {
+                Console.WriteLine($"{question} (y/n)");
+                answer = Console.ReadLine();
+            } while (answer != "y" && answer != "n");
+
+            if (answer == "n")
+                keep = false;
+
+            return keep;
         }
     }
+
+
 }

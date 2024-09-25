@@ -19,14 +19,14 @@ namespace HospitalManagement
         {
             if(!IsPersonOnTheList(person))
                 people.Add(person);
-            else
-                throw new Exception($"Person is not on the {this} list");
+            //else
+            //    throw new Exception($"Person is already registered");
         }
 
         private bool IsPersonOnTheList(Person person)
         {
             foreach (Person p in people)
-                if (p == person)
+                if (p.Equals(person))
                     return true;
 
             return false;
@@ -48,9 +48,7 @@ namespace HospitalManagement
             string hospital = "";
 
             hospital += AddPeopleToString<Doctor>("Doctors");
-
             hospital += AddPeopleToString<Patient>("Patients");
-
             hospital += AddPeopleToString<Administrative>("Administratives");
 
             return hospital;
@@ -63,7 +61,7 @@ namespace HospitalManagement
             listedPeople += groupName + ":\n";
 
             foreach (T person in GetListOf<T>())
-                listedPeople += " " + person.ToString() + "\n";
+                listedPeople += "  - " + person.ToString() + "\n";
 
             return listedPeople;
         }

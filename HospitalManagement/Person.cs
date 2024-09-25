@@ -8,17 +8,11 @@ namespace HospitalManagement
 {
     internal abstract class Person
     {
-        public string Name { get; protected set; }
-        public DateTime BirthDate { get; protected set; }
+        public string Name { get; set; }
 
         public Person(string name)
         {
             Name = name;
-        }
-
-        public Person(string name, DateTime birthDate) : this(name) 
-        {
-            BirthDate = birthDate;
         }
 
         public abstract override string ToString();
