@@ -8,6 +8,7 @@ namespace HospitalManagement
 {
     internal class Doctor : Person
     {
+        string specialty;
         List<Patient> patients;
 
         public List<Patient> Patients { get { return patients; } }

@@ -23,6 +23,15 @@ namespace HospitalManagement
             //    throw new Exception($"Person is already registered");
         }
 
+        public void RemovePatient(Patient patient)
+        {
+            if (IsPersonOnTheList(patient))
+            {
+                people.Remove(patient);
+                patient.Doctor.RemovePatient(patient);
+            }
+        }
+
         private bool IsPersonOnTheList(Person person)
         {
             foreach (Person p in people)
@@ -30,6 +39,11 @@ namespace HospitalManagement
                     return true;
 
             return false;
+        }
+
+        public string DoctorsToString()
+        {
+            return AddPeopleToString<Doctor>("Doctors");
         }
 
         public List<T> GetListOf<T>() where T : Person

@@ -33,6 +33,8 @@ namespace HospitalManagement
 
             do
             {
+                Console.Clear();
+
                 Console.WriteLine(@"
 0. Exit
 1. Register a doctor
@@ -45,6 +47,8 @@ namespace HospitalManagement
                 
                 option = (eOption)int.Parse(Console.ReadLine());
 
+                Console.Clear();
+
                 switch(option)
                 {
                     case eOption.Exit:
@@ -56,12 +60,16 @@ namespace HospitalManagement
                         RegisterPatient();
                         break;
                     case eOption.RegisterAdministrative:
+                        RegisterAdministrative();
                         break;
                     case eOption.ListDoctors:
+                        Console.WriteLine(hospital.DoctorsToString());
                         break;
                     case eOption.ListDoctorsPatients:
+                        ShowDoctorsPatients();
                         break;
                     case eOption.DeletePatient:
+                        RemovePatient();
                         break;
                     case eOption.HospitalPeople:
                         Console.WriteLine(hospital);
@@ -86,21 +94,59 @@ namespace HospitalManagement
             Console.WriteLine("Type the name of the doctor");
             doctorName = Console.ReadLine();
 
-            foreach (Doctor d in hospital.GetListOf<Doctor>())
-            {
-                if (d.Name == doctorName)
-                {
-                    Patient p = new Patient(name, d);
-                    hospital.AddPerson(p);
-                    return;
-                }
-            }
+            Doctor doctor = hospital.GetListOf<Doctor>().Find(d => d.Name == doctorName);
 
-            Doctor doctor = new Doctor(doctorName);
+            if(doctor == null)
+                doctor = new Doctor(doctorName);
+
             hospital.AddPerson(doctor);
-
+            
             Patient patient = new Patient(name, doctor);
+            doctor.AddPatient(patient);
             hospital.AddPerson(patient);
+        }
+
+        static void RegisterAdministrative()
+        {
+            Console.WriteLine("Type the administrative's name");
+            Administrative admin = new Administrative(Console.ReadLine());
+            hospital.AddPerson(admin);
+        }
+
+        static void ShowDoctorsPatients()
+        {
+            Console.WriteLine("Type the name of the doctor");
+            string name = Console.ReadLine();
+
+            Doctor doctor = hospital.GetListOf<Doctor>().Find(d => d.Name == name);
+
+            if(doctor != null)
+            {
+                string patients = $"\nDr {name} patients:\n";
+
+                foreach(Patient p in doctor.Patients) 
+                    patients += "  - " + p.Name + "\n";
+
+                Console.WriteLine(patients);
+            }
+            else
+            {
+                Console.WriteLine("There's no doctor with that name");
+            }
+            
+        }
+
+        static void RemovePatient()
+        {
+            Console.WriteLine("Type the name of the patient you want to remove");
+            Patient patient = hospital.GetListOf<Patient>().Find(p => p.Name == Console.ReadLine());
+
+            if(patient != null)
+            {
+                hospital.RemovePatient(patient);
+            }
+            else
+                Console.WriteLine("There's no patient with that name");
         }
 
         static bool AskToContinue(string question)
