@@ -51,8 +51,8 @@ namespace HospitalManagement
             List<T> list = new List<T>();
 
             foreach (Person person in people)
-                if (person.GetType() == typeof(T))
-                    list.Add((T)person);
+                if (person is T p)
+                    list.Add(p);
 
             return list;
         }

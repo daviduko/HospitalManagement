@@ -9,7 +9,19 @@ namespace HospitalManagement
 {
     internal class Patient : Person
     {
-        public Doctor Doctor { get; set; }
+        private int socialSecurityNumber;
+        private string disease;
+        private Doctor doctor;
+
+        public Doctor Doctor 
+        {
+            get { return doctor; }
+            set
+            {
+                doctor = value;
+                doctor.AddPatient(this);
+            } 
+        }
 
         public Patient(string name) : base(name) { }
 
@@ -20,8 +32,12 @@ namespace HospitalManagement
 
         public override string ToString()
         {
-            string extra = Doctor == null ? "" : $", {Doctor}";
-            return $"{Name}{extra}";
+            string patient = $"{Name}:\n\t{base.ToString()}\n\tDisease: {disease}";
+
+            if (socialSecurityNumber != 0)
+                patient += $"\n\tSocialSecurityNumber: {socialSecurityNumber}";
+
+            return patient;
         }
     }
 }

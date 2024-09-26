@@ -6,13 +6,27 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement
 {
+    public enum eDepartment
+    {
+        Finance = 1,
+        PublicRelations,
+        HRDepartment,
+        EmergencyMedicine
+    }
+
     internal class Administrative : Person
     {
-        public Administrative(string name) : base(name) { }
+        private eDepartment department;
+
+        public eDepartment Department {  get { return department; } }
+        public Administrative(string name, eDepartment dp) : base(name)
+        {
+            department = dp;
+        }
 
         public override string ToString()
         {
-            return Name;
+            return $"{Name}:\n\t{base.ToString()}\n\tDepartment: {department.ToString()}";
         }
     }
 }

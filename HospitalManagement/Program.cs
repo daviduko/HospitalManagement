@@ -18,6 +18,7 @@ namespace HospitalManagement
         DeletePatient,
         HospitalPeople
     }
+
     internal class Program
     {
         static Hospital hospital;
@@ -76,13 +77,19 @@ namespace HospitalManagement
                         break;
                 }
 
-            } while (AskToContinue("Do you want to do something else?"));
+            } while (AskIf("Do you want to do something else?"));
         }
 
         static void RegisterDoctor()
         {
+            string name, specialty;
             Console.WriteLine("Type the doctor's name");
-            Doctor doctor = new Doctor(Console.ReadLine());
+            name = Console.ReadLine();
+
+            Console.WriteLine($"Type the specialty of Dr.{name}");
+            specialty = Console.ReadLine();
+            Doctor doctor = new Doctor(name, specialty);
+
             hospital.AddPerson(doctor);
         }
 
@@ -102,14 +109,29 @@ namespace HospitalManagement
             hospital.AddPerson(doctor);
             
             Patient patient = new Patient(name, doctor);
-            doctor.AddPatient(patient);
             hospital.AddPerson(patient);
         }
 
         static void RegisterAdministrative()
         {
+            string name;
+            int option;
+            eDepartment department;
             Console.WriteLine("Type the administrative's name");
-            Administrative admin = new Administrative(Console.ReadLine());
+            name = Console.ReadLine();
+
+            do
+            {
+                Console.WriteLine($@"Select the department of {name}
+1. Finance
+2. Public relations
+3. HR department
+4. Emergency Medicine");
+            } while (!int.TryParse(Console.ReadLine(), out option) || option > 5 || option < 0);
+
+            department = (eDepartment)option;
+
+            Administrative admin = new Administrative(name, department);
             hospital.AddPerson(admin);
         }
 
@@ -149,7 +171,7 @@ namespace HospitalManagement
                 Console.WriteLine("There's no patient with that name");
         }
 
-        static bool AskToContinue(string question)
+        static bool AskIf(string question)
         {
             string answer;
             bool keep = true;

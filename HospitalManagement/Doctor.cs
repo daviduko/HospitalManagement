@@ -18,6 +18,11 @@ namespace HospitalManagement
             patients = new List<Patient>();
         }
 
+        public Doctor(string name, string specialty) : this(name)
+        {
+            this.specialty = specialty;
+        }
+
         public void AddPatient(Patient patient)
         {
             if(!IsPatientIsOnTheList(patient))
@@ -45,7 +50,10 @@ namespace HospitalManagement
 
         public override string ToString()
         {
-            return $"Dr.{Name}";
+            string doctor = $"Dr.{Name}:\n\tSpecialty: {specialty}\n";
+            doctor += "\t" + base.ToString();
+
+            return doctor;
         }
     }
 }
