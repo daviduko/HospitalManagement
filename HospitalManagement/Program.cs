@@ -16,6 +16,7 @@ namespace HospitalManagement
         ListDoctors,
         ListDoctorsPatients,
         DeletePatient,
+        EditInfo,
         HospitalPeople
     }
 
@@ -44,7 +45,8 @@ namespace HospitalManagement
 4. List of doctors
 5. List of the patients of a doctor
 6. Delete a patient
-7. People from hospital");
+7. Edit data of a person of the hospital
+8. People from hospital");
                 
                 option = (eOption)int.Parse(Console.ReadLine());
 
@@ -71,6 +73,9 @@ namespace HospitalManagement
                         break;
                     case eOption.DeletePatient:
                         RemovePatient();
+                        break;
+                    case eOption.EditInfo:
+                        MenuEdit();
                         break;
                     case eOption.HospitalPeople:
                         Console.WriteLine(hospital);
@@ -127,7 +132,7 @@ namespace HospitalManagement
 2. Public relations
 3. HR department
 4. Emergency Medicine");
-            } while (!int.TryParse(Console.ReadLine(), out option) || option > 5 || option < 0);
+            } while (!int.TryParse(Console.ReadLine(), out option) || option > 4 || option < 1);
 
             department = (eDepartment)option;
 
@@ -169,6 +174,34 @@ namespace HospitalManagement
             }
             else
                 Console.WriteLine("There's no patient with that name");
+        }
+
+        static void MenuEdit()
+        {
+            int option;
+
+            do
+            {
+                Console.WriteLine(@"Which type of person do you want to edit?
+1. Doctor
+2. Patient
+3. Administrative");
+            } while (int.TryParse(Console.ReadLine(), out option) || option < 1 || option > 3);
+
+            List<Person> list;
+
+            switch (option)
+            {
+                case 1:
+                    list = hospital.GetListOf<Doctor>();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+
+             
         }
 
         static bool AskIf(string question)
